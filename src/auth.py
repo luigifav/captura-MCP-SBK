@@ -29,7 +29,12 @@ class TokenManager:
             resp = await client.post(url, json=payload)
             resp.raise_for_status()
             data = resp.json()
-        token = data.get("token") or data.get("access_token") or data.get("accessToken")
+        token = (
+            data.get("token_acesso")
+            or data.get("token")
+            or data.get("access_token")
+            or data.get("accessToken")
+        )
         if not token:
             raise RuntimeError(f"Resposta de login não contém token: {data}")
         self._token = token
