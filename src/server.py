@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.tools import health
+from src.tools import fila, health
 
 mcp = FastMCP(
     "captura-mcp-sbk",
@@ -18,6 +18,7 @@ mcp = FastMCP(
 )
 
 health.register(mcp)
+fila.register(mcp)
 
 
 if __name__ == "__main__":
