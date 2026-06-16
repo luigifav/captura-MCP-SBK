@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.tools import download, fila, health, movimentos
+from src.tools import download, fila, health, movimentos, pesquisas
 
 mcp = FastMCP(
     "captura-mcp-sbk",
@@ -21,6 +21,7 @@ health.register(mcp)
 fila.register(mcp)
 download.register(mcp)
 movimentos.register(mcp)
+pesquisas.register(mcp)
 
 
 if __name__ == "__main__":
