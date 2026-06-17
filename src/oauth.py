@@ -18,6 +18,7 @@ from fastmcp.server.auth.providers.in_memory import (
     DEFAULT_AUTH_CODE_EXPIRY_SECONDS,
     InMemoryOAuthProvider,
 )
+from mcp.server.auth.settings import ClientRegistrationOptions
 from src import config
 from src.context import login_var, senha_var
 
@@ -105,7 +106,10 @@ class SBKOAuthProvider(InMemoryOAuthProvider):
     """OAuth provider that validates credentials against the SBK API."""
 
     def __init__(self, base_url: str):
-        super().__init__(base_url=base_url)
+        super().__init__(
+            base_url=base_url,
+            client_registration_options=ClientRegistrationOptions(enabled=True),
+        )
         self._pending: dict[str, tuple] = {}
         self._credentials_by_code: dict[str, tuple[str, str]] = {}
         self._credentials_by_token: dict[str, tuple[str, str]] = {}
