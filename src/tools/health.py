@@ -10,7 +10,7 @@ def register(mcp: FastMCP) -> None:
         """Verifica disponibilidade da API de Captura SBK. Sem autenticação."""
         url = f"{config.BASE_URL}/v1/api/health"
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
+            async with httpx.AsyncClient(timeout=10.0, verify=False) as client:
                 resp = await client.get(url)
             status = "ok" if 200 <= resp.status_code < 300 else "degraded"
             return {"status": status, "http_status": resp.status_code}

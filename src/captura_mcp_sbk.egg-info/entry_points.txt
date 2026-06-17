@@ -1,0 +1,2 @@
+[console_scripts]
+captura-mcp = src.server:mcp.run

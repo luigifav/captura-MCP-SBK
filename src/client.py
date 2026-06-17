@@ -17,7 +17,7 @@ async def _request(
 
     async def _do(token: str) -> httpx.Response:
         headers = {"Authorization": f"Bearer {token}"}
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
             return await client.request(
                 method, url, params=params, json=json, headers=headers
             )
