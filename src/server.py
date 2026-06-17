@@ -5,6 +5,8 @@ from pathlib import Path
 from fastmcp import FastMCP
 from starlette.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -41,6 +43,11 @@ class CredentialMiddleware(BaseHTTPMiddleware):
 
 
 mcp.add_middleware(Middleware(CredentialMiddleware))
+
+
+@mcp.custom_route("/", methods=["GET"])
+async def root(request: Request) -> JSONResponse:
+    return JSONResponse({"status": "ok"})
 
 
 def run() -> None:
