@@ -1,3 +1,4 @@
+import os
 from typing import Any
 
 import httpx
@@ -13,8 +14,8 @@ async def _request(
     params: dict[str, Any] | None = None,
     json: dict[str, Any] | None = None,
 ) -> Any:
-    login = login_var.get()
-    senha = senha_var.get()
+    login = login_var.get() or os.getenv("CAPTURA_LOGIN", "")
+    senha = senha_var.get() or os.getenv("CAPTURA_SENHA", "")
 
     if not login or not senha:
         raise RuntimeError(
