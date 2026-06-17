@@ -1,7 +1,8 @@
-from fastmcp import FastMCP
-
+import os
 import sys
 from pathlib import Path
+
+from fastmcp import FastMCP
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -24,5 +25,13 @@ movimentos.register(mcp)
 pesquisas.register(mcp)
 
 
+def run() -> None:
+    port = os.getenv("PORT")
+    if port:
+        mcp.run(transport="streamable-http", host="0.0.0.0", port=int(port))
+    else:
+        mcp.run(transport="stdio")
+
+
 if __name__ == "__main__":
-    mcp.run()
+    run()
