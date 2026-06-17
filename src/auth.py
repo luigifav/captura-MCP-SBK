@@ -7,28 +7,31 @@ from src import config
 
 TTL_SECONDS = 55 * 60
 
+_cache: dict[tuple[str, str], tuple[str, float]] = {}
+_locks: dict[tuple[str, str], asyncio.Lock] = {}
+_locks_meta = asyncio.Lock()
 
-class TokenManager:
-    def __init__(self) -> None:
-        self._token: str | None = None
-        self._expires_at: float = 0.0
-        self._lock = asyncio.Lock()
 
-    async def get_token(self) -> str:
-        async with self._lock:
-            if self._token and time.monotonic() < self._expires_at:
-                return self._token
-            await self._refresh()
-            assert self._token is not None
-            return self._token
+async def get_token(login: str, senha: str) -> str:
+    key = (login, senha)
 
-    async def _refresh(self) -> None:
+    async with _locks_meta:
+        if key not in _locks:
+            _locks[key] = asyncio.Lock()
+
+    async with _locks[key]:
+        cached = _cache.get(key)
+        if cached:
+            token, expires_at = cached
+            if time.monotonic() < expires_at:
+                return token
+
         url = f"{config.BASE_URL}/v1/api/auth/login"
-        payload = {"login": config.LOGIN, "senha": config.SENHA}
         async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
-            resp = await client.post(url, json=payload)
+            resp = await client.post(url, json={"login": login, "senha": senha})
             resp.raise_for_status()
             data = resp.json()
+
         token = (
             data.get("token_acesso")
             or data.get("token")
@@ -37,12 +40,10 @@ class TokenManager:
         )
         if not token:
             raise RuntimeError(f"Resposta de login não contém token: {data}")
-        self._token = token
-        self._expires_at = time.monotonic() + TTL_SECONDS
 
-    def invalidate(self) -> None:
-        self._token = None
-        self._expires_at = 0.0
+        _cache[key] = (token, time.monotonic() + TTL_SECONDS)
+        return token
 
 
-token_manager = TokenManager()
+def invalidate(login: str, senha: str) -> None:
+    _cache.pop((login, senha), None)

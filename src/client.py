@@ -2,8 +2,8 @@ from typing import Any
 
 import httpx
 
-from src import config
-from src.auth import token_manager
+from src import auth, config
+from src.context import login_var, senha_var
 
 
 async def _request(
@@ -13,6 +13,15 @@ async def _request(
     params: dict[str, Any] | None = None,
     json: dict[str, Any] | None = None,
 ) -> Any:
+    login = login_var.get()
+    senha = senha_var.get()
+
+    if not login or not senha:
+        raise RuntimeError(
+            "Credenciais não configuradas. "
+            "Informe X-Captura-Login e X-Captura-Senha nos headers da conexão MCP."
+        )
+
     url = f"{config.BASE_URL}{path}"
 
     async def _do(token: str) -> httpx.Response:
@@ -22,17 +31,17 @@ async def _request(
                 method, url, params=params, json=json, headers=headers
             )
 
-    token = await token_manager.get_token()
+    token = await auth.get_token(login, senha)
     resp = await _do(token)
 
     if resp.status_code == 401:
-        token_manager.invalidate()
-        token = await token_manager.get_token()
+        auth.invalidate(login, senha)
+        token = await auth.get_token(login, senha)
         resp = await _do(token)
 
     if resp.status_code == 403:
         raise PermissionError(
-            f"Acesso negado (403) para o usuário '{config.LOGIN}' em {method} {path}. "
+            f"Acesso negado (403) para o usuário '{login}' em {method} {path}. "
             "Verifique permissões na API de Captura SBK."
         )
 
