@@ -25,7 +25,7 @@ class TokenManager:
     async def _refresh(self) -> None:
         url = f"{config.BASE_URL}/v1/api/auth/login"
         payload = {"login": config.LOGIN, "senha": config.SENHA}
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
             resp = await client.post(url, json=payload)
             resp.raise_for_status()
             data = resp.json()

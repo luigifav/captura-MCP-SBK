@@ -1,3 +1,13 @@
+Metadata-Version: 2.4
+Name: captura-mcp-sbk
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastmcp>=3.4.2
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: python-dotenv>=1.2.2
+
 # captura-MCP-SBK
 
 Servidor MCP (Model Context Protocol) para a API de Captura SBK. Expõe as ferramentas de captura judicial como tools prontas para uso por agentes de IA.
