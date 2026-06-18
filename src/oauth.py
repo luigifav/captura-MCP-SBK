@@ -30,145 +30,291 @@ _LOGIN_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login - Captura SBK</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2300A651'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial,sans-serif' font-size='11' font-weight='700' fill='white'%3ESBK%3C/text%3E%3C/svg%3E">
+<title>Login · Captura SBK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23023631'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-size='12' font-weight='700' fill='white'%3ESBK%3C/text%3E%3C/svg%3E">
 <style>
   *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+
   body {{
-    font-family: system-ui, -apple-system, Arial, sans-serif;
-    background: #F0F4F1;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: #ECEFF3;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
   }}
+
   .card {{
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(2, 56, 49, 0.12);
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     overflow: hidden;
   }}
+
   .card-header {{
-    background: #00A651;
-    padding: 28px 32px 24px;
+    position: relative;
+    background: #023631;
+    min-height: 180px;
+    padding: 36px 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     text-align: center;
+    overflow: hidden;
   }}
-  .card-header svg {{
-    display: block;
-    margin: 0 auto 12px;
+
+  .dna-card {{
+    position: absolute;
+    border-radius: 14px;
+    pointer-events: none;
   }}
+  .dna-card-1 {{
+    width: 200px;
+    height: 120px;
+    top: -35px;
+    right: -40px;
+    background: rgba(7, 80, 86, 0.12);
+    border: 1.5px solid rgba(7, 80, 86, 0.18);
+    transform: rotate(12deg);
+  }}
+  .dna-card-2 {{
+    width: 160px;
+    height: 96px;
+    bottom: -28px;
+    left: -28px;
+    background: rgba(10, 90, 82, 0.14);
+    border: 1.5px solid rgba(10, 90, 82, 0.20);
+    transform: rotate(-8deg);
+  }}
+  .dna-card-3 {{
+    width: 120px;
+    height: 72px;
+    top: 16px;
+    left: -16px;
+    background: rgba(7, 80, 86, 0.08);
+    border: 1.5px solid rgba(7, 80, 86, 0.12);
+    transform: rotate(5deg);
+  }}
+
+  .logo-wrap {{
+    position: relative;
+    z-index: 1;
+  }}
+
   .card-header h1 {{
+    position: relative;
+    z-index: 1;
     color: #fff;
     font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 0;
   }}
+
   .card-header p {{
-    color: rgba(255,255,255,0.85);
+    position: relative;
+    z-index: 1;
+    color: rgba(255, 255, 255, 0.70);
     font-size: 13px;
-    margin-top: 4px;
+    font-weight: 300;
+    line-height: 1.5;
+    margin: 0;
   }}
+
   .card-body {{
-    padding: 28px 32px 32px;
+    padding: 40px;
   }}
+
   .hint {{
-    background: #EAF5F0;
-    border-left: 3px solid #00A651;
-    border-radius: 4px;
+    border-left: 3px solid #075056;
+    background: rgba(7, 80, 86, 0.06);
+    border-radius: 0 6px 6px 0;
     padding: 10px 14px;
     font-size: 13px;
-    color: #1A5C35;
-    margin-bottom: 22px;
+    font-weight: 300;
+    color: #4A545E;
+    margin-bottom: 28px;
     line-height: 1.5;
   }}
-  .field {{
-    margin-bottom: 18px;
+
+  .hint strong {{
+    font-weight: 600;
+    color: #012824;
   }}
+
+  .field {{
+    margin-bottom: 20px;
+  }}
+
   label {{
     display: block;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    color: #374151;
-    margin-bottom: 6px;
+    color: #4A545E;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
   }}
+
   input[type="text"],
   input[type="password"] {{
     display: block;
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #D1D5DB;
-    border-radius: 6px;
+    padding: 14px 16px;
+    border: 1.5px solid #D0D5DD;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     font-size: 14px;
-    color: #1A1A1A;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    font-weight: 300;
+    color: #012824;
     background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }}
+
   input[type="text"]:focus,
   input[type="password"]:focus {{
     outline: none;
-    border-color: #00A651;
-    box-shadow: 0 0 0 3px rgba(0,166,81,0.15);
+    border-color: #2A7C79;
+    box-shadow: 0 0 0 3px rgba(42, 124, 121, 0.15);
   }}
-  button {{
-    display: block;
+
+  button[type="submit"] {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     width: 100%;
-    padding: 11px;
-    background: #00A651;
+    height: 52px;
+    padding: 0 20px;
+    background: #023631;
     color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     font-size: 15px;
     font-weight: 600;
+    letter-spacing: 0.04em;
     cursor: pointer;
     margin-top: 8px;
-    transition: background 0.15s;
-    letter-spacing: 0.2px;
+    transition: background 0.2s ease;
   }}
-  button:hover {{ background: #008C44; }}
-  button:active {{ background: #007A3C; }}
-  .err {{
-    color: #991B1B;
-    background: #FEF2F2;
-    border: 1px solid #FECACA;
-    padding: 10px 14px;
-    border-radius: 6px;
+
+  button[type="submit"]:hover {{ background: #075056; }}
+  button[type="submit"]:active {{ background: #012824; }}
+  button[type="submit"]:disabled {{
+    background: #075056;
+    cursor: not-allowed;
+    opacity: 0.85;
+  }}
+
+  .btn-spinner {{
+    display: inline-flex;
+    animation: spin 0.8s linear infinite;
+  }}
+
+  @keyframes spin {{
+    to {{ transform: rotate(360deg); }}
+  }}
+
+  .forgot-link {{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #075056;
     font-size: 13px;
-    margin-bottom: 18px;
+    font-weight: 300;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }}
+
+  .forgot-link:hover {{ text-decoration: underline; }}
+
+  .err {{
+    border: 1.5px solid #FECACA;
+    background: #FEF2F2;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #C0392B;
+    margin-bottom: 20px;
+    line-height: 1.5;
   }}
 </style>
 </head>
 <body>
+
 <div class="card">
   <div class="card-header">
-    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="22" cy="22" r="22" fill="rgba(255,255,255,0.18)"/>
-      <text x="22" y="28" text-anchor="middle" font-family="system-ui,-apple-system,Arial,sans-serif" font-size="18" font-weight="700" fill="#fff">SBK</text>
-    </svg>
+    <div class="dna-card dna-card-1"></div>
+    <div class="dna-card dna-card-2"></div>
+    <div class="dna-card dna-card-3"></div>
+
+    <div class="logo-wrap">
+      <svg width="136" height="48" viewBox="0 0 136 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="84" height="48" rx="9" fill="white" fill-opacity="0.96"/>
+        <text x="42" y="33" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="800" fill="#023631">SBK</text>
+        <rect x="90" y="2" width="44" height="44" rx="8" fill="none" stroke="white" stroke-width="2"/>
+        <text x="112" y="33" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="800" fill="white">IA</text>
+      </svg>
+    </div>
+
     <h1>Captura SBK</h1>
-    <p>Autorize o acesso com suas credenciais.</p>
+    <p>Autorize o acesso com suas credenciais</p>
   </div>
+
   <div class="card-body">
     <div class="hint">
       Use o mesmo login e senha do <strong>Portal de Movimentações SBK</strong>.
     </div>
+
     {error}
-    <form method="post">
+
+    <form method="post" id="login-form">
       <input type="hidden" name="t" value="{token}">
+
       <div class="field">
         <label for="login">Login</label>
         <input type="text" id="login" name="login" required autofocus autocomplete="username">
       </div>
+
       <div class="field">
         <label for="senha">Senha</label>
         <input type="password" id="senha" name="senha" required autocomplete="current-password">
       </div>
-      <button type="submit">Entrar</button>
+
+      <button type="submit" id="btn-entrar">
+        <span class="btn-label">Entrar</span>
+        <span class="btn-spinner" style="display:none">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.30)" stroke-width="2"/>
+            <path d="M9 2a7 7 0 0 1 7 7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </button>
     </form>
+
+    <a href="#" class="forgot-link">Esqueci minha senha</a>
   </div>
 </div>
+
+<script>
+  document.getElementById('login-form').addEventListener('submit', function () {{
+    var btn = document.getElementById('btn-entrar');
+    btn.querySelector('.btn-label').style.display = 'none';
+    btn.querySelector('.btn-spinner').style.display = 'inline-flex';
+    btn.disabled = true;
+  }});
+</script>
+
 </body>
 </html>"""
 
