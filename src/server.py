@@ -30,6 +30,30 @@ async def root(request: Request) -> JSONResponse:
     return JSONResponse({"status": "ok"})
 
 
+@mcp.custom_route("/debug/connectivity", methods=["GET"])
+async def debug_connectivity(request: Request) -> JSONResponse:
+    import socket
+    import httpx
+    from src import config
+
+    results = {}
+
+    s = socket.socket()
+    s.settimeout(5)
+    tcp_result = s.connect_ex(("apisbk.sbk.com.br", 443))
+    s.close()
+    results["tcp_443"] = "open" if tcp_result == 0 else f"blocked (err {tcp_result})"
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0, verify=False) as client:
+            resp = await client.get(f"{config.BASE_URL}/v1/api/auth/login")
+            results["http_get"] = resp.status_code
+    except Exception as exc:
+        results["http_get"] = str(exc)
+
+    return JSONResponse(results)
+
+
 def run() -> None:
     port = os.getenv("PORT")
     if port:
