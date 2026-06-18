@@ -31,32 +31,144 @@ _LOGIN_HTML = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Login - Captura SBK</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2300A651'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial,sans-serif' font-size='11' font-weight='700' fill='white'%3ESBK%3C/text%3E%3C/svg%3E">
 <style>
-  body {{ font-family: Arial, sans-serif; max-width: 380px; margin: 80px auto; padding: 24px; }}
-  h2 {{ margin-bottom: 4px; }}
-  p {{ color: #555; margin-top: 0; }}
-  label {{ font-size: 14px; font-weight: bold; }}
-  input {{ display: block; width: 100%; padding: 8px; margin: 6px 0 16px;
-           box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }}
-  button {{ background: #0a6; color: white; border: none; padding: 10px;
-             cursor: pointer; width: 100%; border-radius: 4px; font-size: 15px; }}
-  button:hover {{ background: #085; }}
-  .err {{ color: #c00; background: #fee; border: 1px solid #fcc;
-          padding: 8px 12px; border-radius: 4px; margin-bottom: 16px; }}
+  *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{
+    font-family: system-ui, -apple-system, Arial, sans-serif;
+    background: #F0F4F1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }}
+  .card {{
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+  }}
+  .card-header {{
+    background: #00A651;
+    padding: 28px 32px 24px;
+    text-align: center;
+  }}
+  .card-header svg {{
+    display: block;
+    margin: 0 auto 12px;
+  }}
+  .card-header h1 {{
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }}
+  .card-header p {{
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    margin-top: 4px;
+  }}
+  .card-body {{
+    padding: 28px 32px 32px;
+  }}
+  .hint {{
+    background: #EAF5F0;
+    border-left: 3px solid #00A651;
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #1A5C35;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }}
+  .field {{
+    margin-bottom: 18px;
+  }}
+  label {{
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+  }}
+  input[type="text"],
+  input[type="password"] {{
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1A1A1A;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    background: #fff;
+  }}
+  input[type="text"]:focus,
+  input[type="password"]:focus {{
+    outline: none;
+    border-color: #00A651;
+    box-shadow: 0 0 0 3px rgba(0,166,81,0.15);
+  }}
+  button {{
+    display: block;
+    width: 100%;
+    padding: 11px;
+    background: #00A651;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s;
+    letter-spacing: 0.2px;
+  }}
+  button:hover {{ background: #008C44; }}
+  button:active {{ background: #007A3C; }}
+  .err {{
+    color: #991B1B;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 18px;
+  }}
 </style>
 </head>
 <body>
-<h2>Captura SBK</h2>
-<p>Entre com suas credenciais para autorizar o acesso.</p>
-{error}
-<form method="post">
-  <input type="hidden" name="t" value="{token}">
-  <label>Login</label>
-  <input type="text" name="login" required autofocus autocomplete="username">
-  <label>Senha</label>
-  <input type="password" name="senha" required autocomplete="current-password">
-  <button type="submit">Entrar</button>
-</form>
+<div class="card">
+  <div class="card-header">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="22" fill="rgba(255,255,255,0.18)"/>
+      <text x="22" y="28" text-anchor="middle" font-family="system-ui,-apple-system,Arial,sans-serif" font-size="18" font-weight="700" fill="#fff">SBK</text>
+    </svg>
+    <h1>Captura SBK</h1>
+    <p>Autorize o acesso com suas credenciais.</p>
+  </div>
+  <div class="card-body">
+    <div class="hint">
+      Use o mesmo login e senha do <strong>Portal de Movimentações SBK</strong>.
+    </div>
+    {error}
+    <form method="post">
+      <input type="hidden" name="t" value="{token}">
+      <div class="field">
+        <label for="login">Login</label>
+        <input type="text" id="login" name="login" required autofocus autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" required autocomplete="current-password">
+      </div>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>"""
 
