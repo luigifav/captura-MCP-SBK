@@ -30,6 +30,19 @@ async def root(request: Request) -> JSONResponse:
     return JSONResponse({"status": "ok"})
 
 
+@mcp.custom_route("/debug/test-api", methods=["GET"])
+async def test_api(request: Request) -> JSONResponse:
+    import httpx
+    from src import config
+    url = f"{config.BASE_URL}/v1/api/auth/login"
+    try:
+        async with httpx.AsyncClient(timeout=10.0, verify=False) as http:
+            resp = await http.post(url, json={"login": "_test_", "senha": "_test_"})
+            return JSONResponse({"ok": True, "url": url, "status": resp.status_code, "body": resp.text[:300]})
+    except Exception as exc:
+        return JSONResponse({"ok": False, "url": url, "error": type(exc).__name__, "detail": str(exc)})
+
+
 def run() -> None:
     port = os.getenv("PORT")
     if port:
