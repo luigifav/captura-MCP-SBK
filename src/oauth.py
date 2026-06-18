@@ -1,9 +1,12 @@
+import logging
 import os
 import secrets
 import time
 from html import escape
 
 import httpx
+
+logger = logging.getLogger(__name__)
 from mcp.server.auth.provider import (
     AuthorizationCode,
     AuthorizationParams,
@@ -206,16 +209,20 @@ class SBKOAuthProvider(InMemoryOAuthProvider):
 
         # Validate against SBK API
         url = f"{config.BASE_URL}/v1/api/auth/login"
+        logger.info("SBK login attempt: url=%s login=%s", url, login)
         try:
             async with httpx.AsyncClient(timeout=15.0, verify=False) as http:
                 resp = await http.post(url, json={"login": login, "senha": senha})
+                logger.info("SBK login response status=%s body=%s", resp.status_code, resp.text[:500])
                 if resp.status_code in (401, 403):
                     return ("", "Login ou senha inválidos.")
                 resp.raise_for_status()
-        except httpx.HTTPStatusError:
+        except httpx.HTTPStatusError as exc:
+            logger.exception("SBK login HTTP error: status=%s body=%s", exc.response.status_code, exc.response.text[:500])
             return ("", "Login ou senha inválidos.")
         except Exception as exc:
-            return ("", f"Erro ao contatar a API: {exc}")
+            logger.exception("SBK login transport error: %r", exc)
+            return ("", f"Erro ao contatar a API: {type(exc).__name__}: {exc}")
 
         # Success: consume pending entry and create auth code
         self._pending.pop(temp_token, None)
