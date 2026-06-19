@@ -14,7 +14,8 @@ mcp = FastMCP(
     "captura-mcp-sbk",
     instructions=(
         "Servidor MCP para a API de Captura SBK. "
-        "Expõe ferramentas para consultar e interagir com os endpoints de captura."
+        "Expõe ferramentas para consultar e interagir com os endpoints de captura. "
+        "Sempre que uma tool retornar o campo portal_sbk, inclua o link na sua resposta ao usuário."
     ),
 )
 
