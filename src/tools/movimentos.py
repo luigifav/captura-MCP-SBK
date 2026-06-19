@@ -3,7 +3,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from src import client
-from src.utils import _paginar
+from src.utils import _com_portal, _paginar
 
 
 def register(mcp: FastMCP) -> None:
@@ -34,6 +34,6 @@ def register(mcp: FastMCP) -> None:
         movimentos. A estrutura de cada movimento varia por tribunal (campos abertos).
         total_linhas=0 significa sem andamentos visíveis para o usuário autenticado.
         """
-        return await client.get(
+        return _com_portal(await client.get(
             "/v1/api/movimentos", params={"id_captura": id_captura}
-        )
+        ))

@@ -3,7 +3,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from src import client
-from src.utils import _paginar
+from src.utils import _com_portal, _paginar
 
 
 def register(mcp: FastMCP) -> None:
@@ -66,4 +66,4 @@ def register(mcp: FastMCP) -> None:
         if org_julgador is not None:
             payload["org_julgador"] = org_julgador
 
-        return await client.post("/v1/api/fila/processos", payload)
+        return _com_portal(await client.post("/v1/api/fila/processos", payload))
