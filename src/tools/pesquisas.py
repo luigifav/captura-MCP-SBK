@@ -3,6 +3,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from src import client
+from src.utils import _com_portal
 
 
 def register(mcp: FastMCP) -> None:
@@ -14,7 +15,7 @@ def register(mcp: FastMCP) -> None:
         Retorna {total, itens: [{id, param_pesquisa, status, tipo, tipo_desc,
         data_cadastro}]}. tipo_desc pode ser "NOME" (tipo=0) ou "CPF/CNPJ" (tipo=1).
         """
-        return await client.get("/v1/api/pesquisas/termos/ativos")
+        return _com_portal(await client.get("/v1/api/pesquisas/termos/ativos"))
 
     @mcp.tool()
     async def captura_criar_termo(
@@ -31,7 +32,7 @@ def register(mcp: FastMCP) -> None:
         Se já existir um termo inativo com o mesmo valor, a API reativa a linha
         existente em vez de criar duplicata.
         """
-        return await client.post(
+        return _com_portal(await client.post(
             "/v1/api/pesquisas/termos",
             {"param_pesquisa": param_pesquisa, "tipo": tipo, "status": status},
-        )
+        ))
