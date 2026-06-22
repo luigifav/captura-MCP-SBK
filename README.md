@@ -46,6 +46,7 @@ Salve o arquivo e reinicie o Claude Desktop. Pronto, sem instalar nada.
 
 ---
 
+
 ## Para desenvolvedores: rodar localmente
 
 ### Pré-requisitos
